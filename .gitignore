@@ -10,9 +10,9 @@
 *~
 *.sass-cache
 _*/
-node_modules/
+.metadata/
 .tmp/
-/.metadata/
+node_modules/
 
 # OS or Editor folders
 .DS_Store
