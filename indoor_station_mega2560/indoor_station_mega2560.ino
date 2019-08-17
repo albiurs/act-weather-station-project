@@ -2,12 +2,14 @@
  * Arduino Indoor Weather Station Project
  *
  * REQUIRES the following Arduino libraries:
- * 	- DHT_sensor_library		https://github.com/adafruit/DHT-sensor-library
- * 	- Adafruit_Unified_Sensor	https://github.com/adafruit/Adafruit_Sensor
- * 	- Wire						I2C interface library
- * 	- DS3231					RTC library
- * 	- SSD1351 					library for the 1.5" 16-bit Color OLED with SSD1351 driver chip
- * 	  GFX tutorial page: https://learn.adafruit.com/adafruit-gfx-graphics-library
+ * 	- DHT_sensor_library		v1.3.7	DHT22 Sensor: https://github.com/adafruit/DHT-sensor-library
+ * 	- Adafruit_Unified_Sensor	v1.0.3	Adafruit Unified Sensor: https://github.com/adafruit/Adafruit_Sensor
+ * 	- Wire						------	I2C interface library (Arduino built-in)
+ * 	- DS3231					v1.0.2	RTC library: https://github.com/NorthernWidget/DS3231
+ * 	- Adafruit GFX Library		v1.5.6	Adafruit GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
+ * 	- SSD1351 					v1.2.2	Adafruit SSD1351 for the 1.5" 16-bit Color OLED with SSD1351 driver chip: https://github.com/adafruit/Adafruit-SSD1351-library
+ * 								GFX tutorial page: https://learn.adafruit.com/adafruit-gfx-graphics-library
+ *	- SPI						------	SPI Master library for Arduino (Arduino built-in)
  */
 
 #include "Arduino.h"
@@ -109,13 +111,13 @@ void setup()
 	// and then re-upload it to the board. Otherwise your clock will reset
 	// every time you open the serial monitor.
 
-	//Clock.setSecond(8);//Set the second
-	//Clock.setMinute(58);//Set the minute
-	//Clock.setHour(19);  //Set the hour
-	//Clock.setDoW(5);    //Set the day of the week
-	//Clock.setDate(16);  //Set the date of the month
-	//Clock.setMonth(8);  //Set the month of the year
-	//Clock.setYear(19);  //Set the year (Last two digits of the year)
+	Clock.setSecond(8);//Set the second
+	Clock.setMinute(58);//Set the minute
+	Clock.setHour(8);  //Set the hour
+	Clock.setDoW(6);    //Set the day of the week
+	Clock.setDate(17);  //Set the date of the month
+	Clock.setMonth(8);  //Set the month of the year
+	Clock.setYear(19);  //Set the year (Last two digits of the year)
 
 	// Start OLED
 	tft.begin();
@@ -213,7 +215,7 @@ void loop()
 	tft.setTextSize(2);
 	tft.print(hic);
 	tft.println("°C");
-	delay(10000);
+	delay(2000);
 
 
 	/*
@@ -281,7 +283,7 @@ void loop()
 	tft.print(Clock.getMonth(Century), DEC);
 	tft.print(".");
 	tft.println(Clock.getYear(), DEC);
-	delay(10000);
+	delay(2000);
 
 
 	/*
