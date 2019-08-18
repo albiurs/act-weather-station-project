@@ -56,6 +56,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/Adafruit_SSD1351_library}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/SPI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/NRFLite/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -84,6 +86,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/Adafruit_SSD1351_library}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/SPI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/NRFLite/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -112,6 +116,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/Adafruit_SSD1351_library}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/SPI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/indoor_station_mega2560/libraries/NRFLite/src}&quot;"/>
                                     								
                                 </option>
                                 								

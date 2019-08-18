@@ -10,6 +10,7 @@
  * 	- SSD1351 					v1.2.2	Adafruit SSD1351 for the 1.5" 16-bit Color OLED with SSD1351 driver chip: https://github.com/adafruit/Adafruit-SSD1351-library
  * 								GFX tutorial page: https://learn.adafruit.com/adafruit-gfx-graphics-library
  *	- SPI						------	SPI Master library for Arduino (Arduino built-in)
+ *	- NRFLite					2.2.2	nRF24L01+ 2.4 GHz Transceiver library: https://github.com/dparson55/NRFLite
  */
 
 #include "Arduino.h"
@@ -18,7 +19,8 @@
 #include <Wire.h>				// I2C wire interface library
 #include <Adafruit_GFX.h>		// Adafruit 1.5" 16-bit Color OLED library
 #include <Adafruit_SSD1351.h>	// Adafruit 1.5" 16-bit Color OLED  Driver
-#include <SPI.h>				// SPI Master library for Arduino (required by Adafruit_GFX.h)
+#include <SPI.h>				// SPI Master library for Arduino (required by Adafruit_GFX.h and NRFLite.h)
+#include <NRFLite.h>			// nRF24L01+ Transceiver library
 
 
 // Debug Sketch
@@ -83,6 +85,34 @@ Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, CS_PIN, DC_
 float p = 3.1415926;	// pi required for graphic demo
 
 
+// nRF24L01+ Radio
+// Read through 'NRFLite.h' for a description of all the methods available in the library.
+
+// Radio    Arduino
+// CE    -> 9
+// CSN   -> 10 (Hardware SPI SS)
+// MOSI  -> 11 (Hardware SPI MOSI)
+// MISO  -> 12 (Hardware SPI MISO)
+// SCK   -> 13 (Hardware SPI SCK)
+// IRQ   -> No connection
+// VCC   -> No more than 3.6 volts
+// GND   -> GND
+
+const static uint8_t RADIO_ID = 0;       // Our radio's id.  The transmitter will send to this id.
+const static uint8_t PIN_RADIO_CE = 9;
+const static uint8_t PIN_RADIO_CSN = 10;
+
+struct RadioPacket // Any packet up to 32 bytes can be sent.
+{
+	uint8_t FromRadioId;
+	uint32_t OnTimeMillis;
+	uint32_t FailedTxCount;
+};
+
+NRFLite _radio;
+RadioPacket _radioData;
+
+
 
 
 /*****************
@@ -95,9 +125,11 @@ void setup()
 	Serial.begin(9600); // serial return of Arduino's output
 	//DEBUG_PRINTLINE("my debug message");
 
+
 	// Start the I2C interface
 	DEBUG_PRINTLINE("Start the I2C interface");
 	Wire.begin();
+
 
 	// Start DHT measurement
 	DEBUG_PRINTLINE(F("Start DHT measurement"));
@@ -119,6 +151,7 @@ void setup()
 	Clock.setMonth(8);  //Set the month of the year
 	Clock.setYear(19);  //Set the year (Last two digits of the year)
 
+
 	// Start OLED
 	tft.begin();
 
@@ -129,6 +162,22 @@ void setup()
 	// NOTE: The test pattern at the start will NOT be rotated!  The code
 	// for rendering the test pattern talks directly to the display and
 	// ignores any rotation.
+
+
+	// Start nRF24L01+ Radio
+	// By default, 'init' configures the radio to use a 2MBPS bitrate on channel 100 (channels 0-125 are valid).
+	// Both the RX and TX radios must have the same bitrate and channel to communicate with each other.
+	// You can run the 'ChannelScanner' example to help select the best channel for your environment.
+	// You can assign a different bitrate and channel as shown below.
+	//   _radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE250KBPS, 0)
+	//   _radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE1MBPS, 75)
+	_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE2MBPS, 100); // THE DEFAULT
+
+	if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN))
+	{
+		Serial.println("Cannot communicate with radio");
+		while (1); // Wait here forever.
+	}
 
 }
 
@@ -287,63 +336,22 @@ void loop()
 
 
 	/*
-	 * OLED Loop
+	 * nRF24L01+ Radio RX / read
 	 */
-	uint16_t time = millis();
-	tft.fillRect(0, 0, 128, 128, BLACK);
-	time = millis() - time;
+	while (_radio.hasData())
+	{
+		_radio.readData(&_radioData); // Note how '&' must be placed in front of the variable name.
 
-	Serial.println(time, DEC);
-	delay(500);
+		String msg = "Radio ";
+		msg += _radioData.FromRadioId;
+		msg += ", ";
+		msg += _radioData.OnTimeMillis;
+		msg += " ms, ";
+		msg += _radioData.FailedTxCount;
+		msg += " Failed TX";
 
-	lcdTestPattern();
-	delay(500);
-
-	tft.invert(true);
-	delay(100);
-	tft.invert(false);
-	delay(100);
-
-	tft.fillScreen(BLACK);
-	testdrawtext("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ", WHITE);
-	delay(500);
-
-	// tft print function!
-	tftPrintTest();
-	delay(500);
-
-	//a single pixel
-	tft.drawPixel(tft.width()/2, tft.height()/2, GREEN);
-	delay(500);
-
-	// line draw test
-	testlines(YELLOW);
-	delay(500);
-
-	// optimized lines
-	testfastlines(RED, BLUE);
-	delay(500);
-
-
-	testdrawrects(GREEN);
-	delay(1000);
-
-	testfillrects(YELLOW, MAGENTA);
-	delay(1000);
-
-	tft.fillScreen(BLACK);
-	testfillcircles(10, BLUE);
-	testdrawcircles(10, WHITE);
-	delay(1000);
-
-	testroundrects();
-	delay(500);
-
-	testtriangles();
-	delay(500);
-
-	//Serial.println("done");
-	//delay(1000);
+		Serial.println(msg);
+	}
 
 }
 
