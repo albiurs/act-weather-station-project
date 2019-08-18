@@ -164,7 +164,7 @@ void loop()
 
 
 	/*
-	 * nRF24L01+ Radio RX
+	 * nRF24L01+ Radio TX
 	 */
 	_radioData.OnTimeMillis = millis();
 

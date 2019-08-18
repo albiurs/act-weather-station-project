@@ -360,7 +360,7 @@ void loop()
 
 
 	/*
-	 * nRF24L01+ Radio RX / read
+	 * nRF24L01+ Radio RX
 	 */
 	while (_radio.hasData())
 	{
