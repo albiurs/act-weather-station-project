@@ -61,6 +61,13 @@ const static uint8_t PIN_RADIO_CSN = 2;
 
 struct RadioPacket // Any packet up to 32 bytes can be sent.
 {
+	uint32_t outTemp;
+	uint32_t outHum;
+	uint32_t outIndex;
+};
+
+struct RadioPacket0 // Any packet up to 32 bytes can be sent.
+{
 	uint8_t FromRadioId;
 	uint32_t OnTimeMillis;
 	uint32_t FailedTxCount;
@@ -68,6 +75,7 @@ struct RadioPacket // Any packet up to 32 bytes can be sent.
 
 NRFLite _radio;
 RadioPacket _radioData;
+RadioPacket0 _radioData0;
 
 
 
@@ -109,7 +117,7 @@ void setup()
 		while (1); // Wait here forever.
 	}
 
-	_radioData.FromRadioId = RADIO_ID;
+	_radioData0.FromRadioId = RADIO_ID;
 
 }
 
@@ -166,11 +174,14 @@ void loop()
 	/*
 	 * nRF24L01+ Radio TX
 	 */
-	_radioData.OnTimeMillis = millis();
+	_radioData.outTemp = t;
+	_radioData.outHum = h;
+	_radioData.outIndex = hic;
 
-	Serial.print("Sending ");
-	Serial.print(_radioData.OnTimeMillis);
-	Serial.print(" ms");
+	Serial.println("Sending:");
+	Serial.println(_radioData.outTemp);
+	Serial.println(_radioData.outHum);
+	Serial.println(_radioData.outIndex);
 
 	// By default, 'send' transmits data and waits for an acknowledgement.  If no acknowledgement is received,
 	// it will try again up to 16 times.  You can also perform a NO_ACK send that does not request an acknowledgement.
@@ -187,7 +198,7 @@ void loop()
 	else
 	{
 		Serial.println("...Failed");
-		_radioData.FailedTxCount++;
+		_radioData0.FailedTxCount++;
 	}
 
 	delay(1000);

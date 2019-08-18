@@ -115,9 +115,9 @@ const static uint8_t PIN_RADIO_CSN = 10;
 
 struct RadioPacket // Any packet up to 32 bytes can be sent.
 {
-	uint8_t FromRadioId;
-	uint32_t OnTimeMillis;
-	uint32_t FailedTxCount;
+	uint32_t outTemp;
+	uint32_t outHum;
+	uint32_t outIndex;
 };
 
 NRFLite _radio;
@@ -214,84 +214,6 @@ void loop()
 {
 
 	/*
-	 * DHT Sensor Read
-	 */
-	// Wait a few seconds between measurements.
-	delay(3000);
-
-	// Reading temperature or humidity takes about 250 milliseconds!
-	// Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-	float h = dht.readHumidity();
-	// Read temperature as Celsius (the default)
-	float t = dht.readTemperature();
-	// Read temperature as Fahrenheit (isFahrenheit = true)
-	float f = dht.readTemperature(true);
-
-	// Check if any reads failed and exit early (to try again).
-	if (isnan(h) || isnan(t) || isnan(f)) {
-		Serial.println(F("Failed to read from DHT sensor!"));
-		return;
-	}
-
-	// Compute heat index in Fahrenheit (the default)
-	//float hif = dht.computeHeatIndex(f, h);
-	// Compute heat index in Celsius (isFahreheit = false)
-	float hic = dht.computeHeatIndex(t, h, false);
-
-	Serial.print(F("Humidity: "));
-	Serial.print(h);
-	Serial.print(F("%  Temperature: "));
-	Serial.print(t);
-	Serial.print(F("°C "));
-	//Serial.print(f);
-	//Serial.print(F("°F"));
-	Serial.print(F("  Heat index: "));
-	Serial.print(hic);
-	Serial.println(F("°C "));
-	//Serial.print(hif);
-	//Serial.println(F("°F"));
-	Serial.println();
-	Serial.println();
-
-	// Print values to OLED
-	tft.fillScreen(BLACK);
-	tft.setCursor(0, 5);
-	tft.setTextColor(BLUE);
-	tft.setTextSize(1);
-	tft.print("Luft: ");
-	tft.setTextSize(0);
-	tft.println();
-	tft.setTextSize(2);
-	tft.print(h);
-	tft.println("%");
-	tft.setTextSize(0);
-	tft.println();
-	delay(200);
-
-	tft.setTextColor(RED);
-	tft.setTextSize(1);
-	tft.print("Temp.: ");
-	tft.setTextSize(0);
-	tft.println();
-	tft.setTextSize(2);
-	tft.print(t);
-	tft.println("°C");
-	tft.setTextSize(0);
-	tft.println();
-	delay(200);
-
-	tft.setTextColor(MAGENTA);
-	tft.setTextSize(1);
-	tft.print("Index: ");
-	tft.setTextSize(0);
-	tft.println();
-	tft.setTextSize(2);
-	tft.print(hic);
-	tft.println("°C");
-	delay(2000);
-
-
-	/*
 	 * RTC read
 	 */
 	// send what's going on to the serial monitor.
@@ -356,39 +278,162 @@ void loop()
 	tft.print(Clock.getMonth(Century), DEC);
 	tft.print(".");
 	tft.println(Clock.getYear(), DEC);
-	delay(2000);
+	delay(1000);
+
+
+	/*
+	 * DHT Sensor Read
+	 */
+	// Wait a few seconds between measurements.
+	delay(3000);
+
+	// Print Title to OLED
+	tft.fillScreen(BLACK);
+	tft.setCursor(0, 5);
+	tft.setTextColor(WHITE);
+	tft.setTextSize(2);
+	tft.println("Indoor");
+	tft.setTextSize(0);
+	tft.println();
+
+	// Reading temperature or humidity takes about 250 milliseconds!
+	// Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+	float h = dht.readHumidity();
+	// Read temperature as Celsius (the default)
+	float t = dht.readTemperature();
+	// Read temperature as Fahrenheit (isFahrenheit = true)
+	float f = dht.readTemperature(true);
+
+	// Check if any reads failed and exit early (to try again).
+	if (isnan(h) || isnan(t) || isnan(f)) {
+		Serial.println(F("Failed to read from DHT sensor!"));
+		return;
+	}
+
+	// Compute heat index in Fahrenheit (the default)
+	//float hif = dht.computeHeatIndex(f, h);
+	// Compute heat index in Celsius (isFahreheit = false)
+	float hic = dht.computeHeatIndex(t, h, false);
+
+	Serial.print(F("%  Temperature: "));
+	Serial.print(t);
+	Serial.print(F("°C"));
+	//Serial.print(f);
+	//Serial.print(F("°F"));
+	Serial.print(F("  Heat index: "));
+	Serial.print(hic);
+	Serial.println(F("°C"));
+	//Serial.print(hif);
+	//Serial.println(F("°F"));
+	Serial.print(F("Humidity: "));
+	Serial.print(h);
+
+	Serial.println();
+	Serial.println();
+
+	// Print values to OLED
+	tft.setTextColor(RED);
+	tft.setTextSize(1);
+	tft.print("Temp.: ");
+	tft.setTextSize(0);
+	tft.println();
+	tft.setTextSize(2);
+	tft.print(t);
+	tft.println("°C");
+	tft.setTextSize(0);
+	tft.println();
+	delay(200);
+
+	tft.setTextColor(MAGENTA);
+	tft.setTextSize(1);
+	tft.print("Index: ");
+	tft.setTextSize(0);
+	tft.println();
+	tft.setTextSize(2);
+	tft.print(hic);
+	tft.println("°C");
+	tft.setTextSize(0);
+	tft.println();
+	delay(200);
+
+	tft.setTextColor(BLUE);
+	tft.setTextSize(1);
+	tft.print("Luft: ");
+	tft.setTextSize(0);
+	tft.println();
+	tft.setTextSize(2);
+	tft.print(h);
+	tft.println("%");
+	tft.setTextSize(0);
+	tft.println();
+	delay(1000);
 
 
 	/*
 	 * nRF24L01+ Radio RX
 	 */
+	// Print Title to OLED
+	tft.fillScreen(BLACK);
+	tft.setCursor(0, 5);
+	tft.setTextColor(WHITE);
+	tft.setTextSize(2);
+	tft.println("Outdoor");
+	tft.setTextSize(0);
+	tft.println();
+
 	while (_radio.hasData())
 	{
 		_radio.readData(&_radioData); // Note how '&' must be placed in front of the variable name.
-
-		String msg = "Radio ";
-		msg += _radioData.FromRadioId;
-		msg += ", ";
-		msg += _radioData.OnTimeMillis;
-		msg += " ms, ";
-		msg += _radioData.FailedTxCount;
-		msg += " Failed TX";
-
-		Serial.println(msg);
-
-		// Print values to OLED
-		tft.fillScreen(BLACK);
-		tft.setCursor(0, 5);
-		tft.setTextColor(RED);
-		tft.setTextSize(2);
-		tft.println("Outdoor RX");
-
-		tft.setTextColor(BLUE);
-		tft.setTextSize(2);
-		tft.println(msg);
 	}
 
-	delay(2000);
+	String msg1 = "";
+	msg1 += _radioData.outTemp;
+	msg1 += "°C";
+
+	String msg2 = "";
+	msg2 += _radioData.outHum;
+	msg2 += "%";
+
+	String msg3 = "";
+	msg3 += _radioData.outIndex;
+	msg3 += "°C";
+
+	Serial.println("Temp.: ");
+	Serial.print(msg1);
+
+	Serial.println("Luft: ");
+	Serial.print(msg2);
+
+	Serial.println("Index: ");
+	Serial.print(msg3);
+
+	// Print values to OLED
+
+	tft.setTextColor(RED);
+	tft.setTextSize(1);
+	tft.println("Temperatur:");
+	tft.setTextSize(2);
+	tft.println(msg1);
+	tft.setTextSize(0);
+	tft.println();
+
+	tft.setTextColor(MAGENTA);
+	tft.setTextSize(1);
+	tft.println("Index:");
+	tft.setTextSize(2);
+	tft.println(msg3);
+	tft.setTextSize(0);
+	tft.println();
+
+	tft.setTextColor(BLUE);
+	tft.setTextSize(1);
+	tft.println("Luft:");
+	tft.setTextSize(2);
+	tft.println(msg2);
+	tft.setTextSize(0);
+	tft.println();
+
+	delay(1000);
 
 }
 
