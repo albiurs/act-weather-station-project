@@ -2,8 +2,6 @@
  * Arduino Outdoor Weather Station Project
  *
  * REQUIRES the following Arduino libraries:
- * 	- DHT_sensor_library		v1.3.7	DHT22 Sensor: https://github.com/adafruit/DHT-sensor-library
- * 	- Adafruit_Unified_Sensor	v1.0.3	Adafruit Unified Sensor: https://github.com/adafruit/Adafruit_Sensor
  *	- SPI						------	SPI Master library for Arduino (Arduino built-in)
  *	- NRFLite					2.2.2	nRF24L01+ 2.4 GHz Transceiver library: https://github.com/dparson55/NRFLite
  *	- Arduino_MKRENV			1.1.0	MKRENV Library for Arduino: https://github.com/arduino-libraries/Arduino_MKRENV
@@ -16,7 +14,6 @@
  * Include libraries
  */
 #include "Arduino.h"
-#include "DHT.h"				// DHT sensor librar
 #include <SPI.h>				// SPI Master library for Arduino (required by NRFLite.h)
 #include <NRFLite.h>			// nRF24L01+ Transceiver library
 #include <Arduino_MKRENV.h>		// MKRENV Library for Arduino
@@ -33,15 +30,6 @@
 #define DEBUG_PRINT(x)						// do nothing
 #define DEBUG_PRINTLINE(x)					// do nothing
 #endif
-
-
-/*
- * DHT initialize
- */
-#define DHTPIN 3			// Digital pin connected to the DHT sensor
-#define DHTTYPE DHT22		// DHT type = DHT22
-
-DHT dht(DHTPIN, DHTTYPE);	// Initialize DHT sensor.
 
 
 /*
@@ -80,16 +68,8 @@ struct RadioPacket // Any packet up to 32 bytes can be sent.
 	float outUvIndex;
 };
 
-struct RadioPacket0 // Any packet up to 32 bytes can be sent.
-{
-	uint8_t FromRadioId;
-	uint32_t OnTimeMillis;
-	uint32_t FailedTxCount;
-};
-
 NRFLite _radio;
 RadioPacket _radioData;
-RadioPacket0 _radioData0;
 
 
 
@@ -105,13 +85,6 @@ void setup()
 	 */
 	Serial.begin(9600); // serial return of Arduino's output
 	//DEBUG_PRINTLINE("my debug message");
-
-
-	/*
-	 * Start DHT measurement
-	 */
-	DEBUG_PRINTLINE(F("Start DHT measurement"));
-	dht.begin();
 
 
 	/*
@@ -140,8 +113,6 @@ void setup()
 		while (1); // Wait here forever.
 	}
 
-	_radioData0.FromRadioId = RADIO_ID;
-
 }
 
 
@@ -152,47 +123,6 @@ void setup()
  ***************/
 void loop()
 {
-
-	/*
-	 * DHT Sensor read
-	 */
-	// Wait a few seconds between measurements.
-	delay(3000);
-
-	// Reading temperature or humidity takes about 250 milliseconds!
-	// Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-	float h = dht.readHumidity();
-	// Read temperature as Celsius (the default)
-	float t = dht.readTemperature();
-	// Read temperature as Fahrenheit (isFahrenheit = true)
-	float f = dht.readTemperature(true);
-
-	// Check if any reads failed and exit early (to try again).
-	if (isnan(h) || isnan(t) || isnan(f)) {
-		Serial.println(F("Failed to read from DHT sensor!"));
-		return;
-	}
-
-	// Compute heat index in Fahrenheit (the default)
-	//float hif = dht.computeHeatIndex(f, h);
-	// Compute heat index in Celsius (isFahreheit = false)
-	float hic = dht.computeHeatIndex(t, h, false);
-
-	Serial.print(F("Humidity: "));
-	Serial.print(h);
-	Serial.print(F("%  Temperature: "));
-	Serial.print(t);
-	Serial.print(F("°C "));
-	//Serial.print(f);
-	//Serial.print(F("°F"));
-	Serial.print(F("  Heat index: "));
-	Serial.print(hic);
-	Serial.println(F("°C "));
-	//Serial.print(hif);
-	//Serial.println(F("°F"));
-	Serial.println();
-	Serial.println();
-
 
 	/*
 	 * MKR ENV read
@@ -235,9 +165,6 @@ void loop()
 	// print an empty line
 	Serial.println();
 
-	// wait 1 second to print again
-	delay(1000);
-
 
 	/*
 	 * nRF24L01+ Radio TX
@@ -274,7 +201,6 @@ void loop()
 	else
 	{
 		Serial.println("...Failed");
-		_radioData0.FailedTxCount++;
 	}
 
 	delay(1000);
@@ -295,7 +221,7 @@ void loop()
 void print (const char str[], int number) {
 	char buf[100];
 	sprintf(buf, "%s %d", str, number);
-	DEBUG_PRINTLN(buf);
+	DEBUG_PRINTLINE(buf);
 }
 
 void print (const char str[], float number) {
@@ -303,5 +229,5 @@ void print (const char str[], float number) {
 	char strbuf[10];
 	dtostrf(number, 3, 3, strbuf);
 	sprintf(buf, "%s %s", str, strbuf);
-	DEBUG_PRINTLN(buf);
+	DEBUG_PRINTLINE(buf);
 }

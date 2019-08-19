@@ -47,10 +47,6 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/SPI/src}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Adafruit_Unified_Sensor}&quot;"/>
-                                    									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/DHT_sensor_library}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Arduino_MKRENV/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Wire/src}&quot;"/>
@@ -73,10 +69,6 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/SPI/src}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Adafruit_Unified_Sensor}&quot;"/>
-                                    									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/DHT_sensor_library}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Arduino_MKRENV/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Wire/src}&quot;"/>
@@ -98,10 +90,6 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/NRFLite/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/SPI/src}&quot;"/>
-                                    									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Adafruit_Unified_Sensor}&quot;"/>
-                                    									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/DHT_sensor_library}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/outdoor_station_mega2560/libraries/Arduino_MKRENV/src}&quot;"/>
                                     									

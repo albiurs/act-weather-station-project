@@ -529,7 +529,7 @@ void loop()
 void print (const char str[], int number) {
 	char buf[100];
 	sprintf(buf, "%s %d", str, number);
-	DEBUG_PRINTLN(buf);
+	DEBUG_PRINTLINE(buf);
 }
 
 void print (const char str[], float number) {
@@ -537,5 +537,5 @@ void print (const char str[], float number) {
 	char strbuf[10];
 	dtostrf(number, 3, 3, strbuf);
 	sprintf(buf, "%s %s", str, strbuf);
-	DEBUG_PRINTLN(buf);
+	DEBUG_PRINTLINE(buf);
 }
