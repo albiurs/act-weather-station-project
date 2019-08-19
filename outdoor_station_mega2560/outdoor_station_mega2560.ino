@@ -220,7 +220,7 @@ void loop()
  ************/
 
 /*
- * Debug functions
+ * Print functions
  */
 void print (const char str[], int number) {
 	char buf[100];
