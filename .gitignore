@@ -1,4 +1,36 @@
-# Numerous always-ignore extensions
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+
+# Always-ignore extensions #
+############################
 *.diff
 *.err
 *.orig
@@ -7,24 +39,43 @@
 *.swo
 *.swp
 *.vi
-*~
 *.sass-cache
-_*/
-.metadata/
-.tmp/
-node_modules/
+*~
 
-# OS or Editor folders
-.DS_Store
-Thumbs.db
+
+# OS and editor generated files and folders #
+#############################################
+._*
 .cache
-.project
+.DS_Store
+.DS_Store?
+.komodotools
+.metadata/
 .settings
+.Spotlight-V100
+.tmp/
 .tmproj
+.Trashes
 *.esproj
-nbproject
+*.komodoproject
 *.sublime-project
 *.sublime-workspace
-*.komodoproject
-.komodotools
+**/bin/
 _notes
+dwsync.xml
+ehthumbs.db
+node_modules/
+Thumbs.db
+
+# Project related files & folders #
+###################################
+.komodotools
+.project
+.tmproj
+*.esproj
+*.komodoproject
+*.sublime-project
+*.sublime-workspace
+_*/
+_notes
+nbproject
