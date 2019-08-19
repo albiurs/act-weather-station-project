@@ -30,13 +30,17 @@
 /*
  * Debug initialize
  */
-#define DEBUG // activate "debug switch"
-#ifdef DEBUG
-#define DBUG_PRINT(x) Serial.print(x)		// activate print
-#define DEBUG_PRINTLINE(x) Serial.println(x)	// activate print line
+#define DBUG // activate "debug switch"
+#ifdef DBUG
+#define DBUG_PRINT(x) Serial.print(x)				// activate print
+#define DBUG_PRINT2ARGS(x, y) Serial.print(x, y)	// activate print with two arguments
+#define DBUG_PRINTLN(x) Serial.println(x)			// activate print line
+#define DBUG_PRINTLN2ARGS(x, y) Serial.println(x, y)// activate print line with two arguments
 #else
-#define DEBUG_PRINT(x)						// do nothing
-#define DEBUG_PRINTLINE(x)					// do nothing
+#define DBUG_PRINT(x)								// do nothing
+#define DBUG_PRINT2ARGS(x, y)						// do nothing
+#define DBUG_PRINTLN(x)								// do nothing
+#define DBUG_PRINTLN2ARGS(x, y)						// do nothing
 #endif
 
 
@@ -139,21 +143,21 @@ void setup()
 	/*
 	 * Start serial port & serial monitor to Baud rate 9600 bits/s
 	 */
+	DBUG_PRINTLN("Start serial monitor");
 	Serial.begin(9600); // serial return of Arduino's output
-	//DEBUG_PRINTLINE("my debug message");
 
 
 	/*
 	 * Start the I2C interface
 	 */
-	DEBUG_PRINTLINE("Start the I2C interface");
+	DBUG_PRINTLN("Start the I2C interface");
 	Wire.begin();
 
 
 	/*
 	 * Start DHT measurement
 	 */
-	DEBUG_PRINTLINE(F("Start DHT measurement"));
+	DBUG_PRINTLN(F("Start DHT measurement"));
 	dht.begin();
 
 
@@ -180,6 +184,7 @@ void setup()
 	/*
 	 * Start OLED
 	 */
+	DBUG_PRINTLN("Start OLED");
 	tft.begin();
 
 	// You can optionally rotate the display by running the line below.
@@ -191,20 +196,27 @@ void setup()
 	// ignores any rotation.
 
 
-	// Start nRF24L01+ Radio
+	/*
+	 * Start nRF24L01+ Radio
+	 */
 	// By default, 'init' configures the radio to use a 2MBPS bitrate on channel 100 (channels 0-125 are valid).
 	// Both the RX and TX radios must have the same bitrate and channel to communicate with each other.
 	// You can run the 'ChannelScanner' example to help select the best channel for your environment.
 	// You can assign a different bitrate and channel as shown below.
 	//   _radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE250KBPS, 0)
 	//   _radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE1MBPS, 75)
+	DBUG_PRINTLN("Start Radio");
 	_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE2MBPS, 100); // THE DEFAULT
 
 	if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN))
 	{
-		Serial.println("Cannot communicate with radio");
+		DBUG_PRINTLN("Cannot communicate with radio");
 		while (1); // Wait here forever.
 	}
+
+
+	DBUG_PRINTLN();
+	DBUG_PRINTLN();
 
 }
 
@@ -222,49 +234,47 @@ void loop()
 	 */
 	// send what's going on to the serial monitor.
 	// Start with the year
-	Serial.print("2");
+	DBUG_PRINT("2");
 	if (Century) {			// Won't need this for 89 years.
-		Serial.print("1");
+		DBUG_PRINT("1");
 	} else {
-		Serial.print("0");
+		DBUG_PRINT("0");
 	}
-	Serial.print(Clock.getYear(), DEC);
-	Serial.print(' ');
+	DBUG_PRINT2ARGS(Clock.getYear(), DEC);
+	DBUG_PRINT(' ');
 	// then the month
-	Serial.print(Clock.getMonth(Century), DEC);
-	Serial.print(' ');
+	DBUG_PRINT2ARGS(Clock.getMonth(Century), DEC);
+	DBUG_PRINT(' ');
 	// then the date
-	Serial.print(Clock.getDate(), DEC);
-	Serial.print(' ');
+	DBUG_PRINT2ARGS(Clock.getDate(), DEC);
+	DBUG_PRINT(' ');
 	// and the day of the week
-	Serial.print(Clock.getDoW(), DEC);
-	Serial.print(' ');
+	DBUG_PRINT2ARGS(Clock.getDoW(), DEC);
+	DBUG_PRINT(' ');
 	// Finally the hour, minute, and second
-	Serial.print(Clock.getHour(h12, PM), DEC);
-	Serial.print(' ');
-	Serial.print(Clock.getMinute(), DEC);
-	Serial.print(' ');
-	Serial.print(Clock.getSecond(), DEC);
+	DBUG_PRINT2ARGS(Clock.getHour(h12, PM), DEC);
+	DBUG_PRINT(' ');
+	DBUG_PRINT2ARGS(Clock.getMinute(), DEC);
+	DBUG_PRINT(' ');
+	DBUG_PRINT2ARGS(Clock.getSecond(), DEC);
 	// Add AM/PM indicator
 	if (h12) {
 		if (PM) {
-			Serial.print(" PM ");
+			DBUG_PRINT(" PM ");
 		} else {
-			Serial.print(" AM ");
+			DBUG_PRINT(" AM ");
 		}
 	} else {
-		Serial.print(" 24h ");
+		DBUG_PRINT(" 24h ");
 	}
-	Serial.println();
-	Serial.println();
 
-	// New line on console
-	Serial.print('\n');
-	delay(1500);
+	DBUG_PRINTLN();
+	DBUG_PRINTLN();
 
 	// Print values to OLED
 	tft.setCursor(0, 5);
 	tft.fillScreen(BLACK);
+	tft.println();
 	tft.setTextColor(WHITE);
 	tft.setTextSize(2);
 	tft.print(Clock.getHour(h12, PM), DEC);
@@ -276,23 +286,18 @@ void loop()
 	delay(200);
 
 	tft.setTextSize(2);
-	tft.setTextColor(GREEN);
+	tft.setTextColor(WHITE);
 	tft.print(Clock.getDate(), DEC);
 	tft.print(".");
 	tft.print(Clock.getMonth(Century), DEC);
 	tft.print(".");
 	tft.println(Clock.getYear(), DEC);
-	delay(2000);
+	delay(3000);
 
 
 	/*
 	 * DHT Sensor Read
 	 */
-	// Wait a few seconds between measurements.
-	//delay(3000);
-
-	// Reading temperature or humidity takes about 250 milliseconds!
-	// Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
 	float h = dht.readHumidity();
 	// Read temperature as Celsius (the default)
 	float t = dht.readTemperature();
@@ -301,7 +306,7 @@ void loop()
 
 	// Check if any reads failed and exit early (to try again).
 	if (isnan(h) || isnan(t) || isnan(f)) {
-		Serial.println(F("Failed to read from DHT sensor!"));
+		DBUG_PRINTLN(F("Failed to read from DHT sensor!"));
 		return;
 	}
 
@@ -310,21 +315,23 @@ void loop()
 	// Compute heat index in Celsius (isFahreheit = false)
 	float hic = dht.computeHeatIndex(t, h, false);
 
-	Serial.print(F("%  Temperature: "));
-	Serial.print(t);
-	Serial.print(F("°C"));
-	//Serial.print(f);
-	//Serial.print(F("°F"));
-	Serial.print(F("  Heat index: "));
-	Serial.print(hic);
-	Serial.println(F("°C"));
-	//Serial.print(hif);
-	//Serial.println(F("°F"));
-	Serial.print(F("Humidity: "));
-	Serial.print(h);
+	DBUG_PRINTLN("Indoor:");
+	DBUG_PRINT(F("Temperature: "));
+	DBUG_PRINT(t);
+	DBUG_PRINTLN(F(" °C"));
+	//DBUG_PRINT(f);
+	//DBUG_PRINT(F("°F"));
+	DBUG_PRINT(F("Heat index: "));
+	DBUG_PRINT(hic);
+	DBUG_PRINTLN(F(" °C"));
+	//DBUG_PRINT(hif);
+	//DBUG_PRINT(F("°F"));
+	DBUG_PRINT(F("Humidity: "));
+	DBUG_PRINT(h);
+	DBUG_PRINTLN(F(" %"));
 
-	Serial.println();
-	Serial.println();
+	DBUG_PRINTLN();
+	DBUG_PRINTLN();
 
 	// Print Title to OLED
 	tft.fillScreen(BLACK);
@@ -336,42 +343,44 @@ void loop()
 	tft.println();
 
 	// Print values to OLED
-	tft.setTextColor(RED);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.print("Temperatur: ");
+	tft.setTextColor(RED);
 	tft.setTextSize(0);
 	tft.println();
 	tft.setTextSize(2);
 	tft.print(t);
-	tft.println("°C");
+	tft.println(" °C");
 	tft.setTextSize(0);
 	tft.println();
 	delay(200);
 
-	tft.setTextColor(MAGENTA);
+	/*tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.print("Temp.-Index: ");
+	tft.setTextColor(MAGENTA);
 	tft.setTextSize(0);
 	tft.println();
 	tft.setTextSize(2);
 	tft.print(hic);
-	tft.println("°C");
+	tft.println(" °C");
 	tft.setTextSize(0);
 	tft.println();
-	delay(200);
+	delay(200);*/
 
-	tft.setTextColor(BLUE);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.print("Luftfeuchtigkeit: ");
+	tft.setTextColor(BLUE);
 	tft.setTextSize(0);
 	tft.println();
 	tft.setTextSize(2);
 	tft.print(h);
-	tft.println("%");
+	tft.println(" %");
 	tft.setTextSize(0);
 	tft.println();
-
-	delay(2000);
+	delay(3000);
 
 
 	/*
@@ -385,19 +394,19 @@ void loop()
 
 	String msg1 = "";
 	msg1 += _radioData.outTemp;
-	msg1 += "°C";
+	msg1 += " °C";
 
 	String msg2 = "";
 	msg2 += _radioData.outHum;
-	msg2 += "%";
+	msg2 += " %";
 
 	String msg3 = "";
 	msg3 += _radioData.outPress;
-	msg3 += "kPa";
+	msg3 += " kPa";
 
 	String msg4 = "";
 	msg4 += _radioData.outIllum;
-	msg4 += "lx";
+	msg4 += " lx";
 
 	String msg5 = "";
 	msg5 += _radioData.outUva;
@@ -411,26 +420,31 @@ void loop()
 	msg7 += _radioData.outUvIndex;
 	msg7 += "";
 
-	Serial.print("Temp.: ");
-	Serial.println(msg1);
+	DBUG_PRINTLN("Outdoor:");
 
-	Serial.print("Luftfeuchtigkeit: ");
-	Serial.println(msg2);
+	DBUG_PRINT("Temp.: ");
+	DBUG_PRINTLN(msg1);
 
-	Serial.print("Luftdruck: ");
-	Serial.println(msg3);
+	DBUG_PRINT("Luftfeuchtigkeit: ");
+	DBUG_PRINTLN(msg2);
 
-	Serial.print("Illuminanz: ");
-	Serial.println(msg4);
+	DBUG_PRINT("Luftdruck: ");
+	DBUG_PRINTLN(msg3);
 
-	Serial.print("UVA: ");
-	Serial.println(msg5);
+	DBUG_PRINT("Illuminanz: ");
+	DBUG_PRINTLN(msg4);
 
-	Serial.print("UVB: ");
-	Serial.println(msg6);
+	DBUG_PRINT("UVA: ");
+	DBUG_PRINTLN(msg5);
 
-	Serial.print("UV Index: ");
-	Serial.println(msg7);
+	DBUG_PRINT("UVB: ");
+	DBUG_PRINTLN(msg6);
+
+	DBUG_PRINT("UV Index: ");
+	DBUG_PRINTLN(msg7);
+
+	DBUG_PRINTLN();
+	DBUG_PRINTLN();
 
 	// Print Title to OLED
 	tft.fillScreen(BLACK);
@@ -443,31 +457,35 @@ void loop()
 
 	// Print values to OLED
 
-	tft.setTextColor(RED);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.println("Temperatur:");
+	tft.setTextColor(RED);
 	tft.setTextSize(2);
 	tft.println(msg1);
 	tft.setTextSize(0);
 	tft.println();
+	delay(200);
 
-	tft.setTextColor(MAGENTA);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.println("Luftfeuchtigkeit:");
+	tft.setTextColor(BLUE);
 	tft.setTextSize(2);
 	tft.println(msg2);
 	tft.setTextSize(0);
 	tft.println();
+	delay(200);
 
-	tft.setTextColor(BLUE);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.println("Luftdruck:");
+	tft.setTextColor(MAGENTA);
 	tft.setTextSize(2);
 	tft.println(msg3);
 	tft.setTextSize(0);
 	tft.println();
-
-	delay(2000);
+	delay(3000);
 
 	// Print Title to OLED
 	tft.fillScreen(BLACK);
@@ -480,39 +498,45 @@ void loop()
 
 	// Print values to OLED
 
-	tft.setTextColor(RED);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
 	tft.println("Illuminanz:");
-	tft.setTextSize(1);
+	tft.setTextColor(YELLOW);
+	tft.setTextSize(2);
 	tft.println(msg4);
 	tft.setTextSize(0);
 	tft.println();
+	delay(200);
 
-	tft.setTextColor(MAGENTA);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
-	tft.println("UVA:");
-	tft.setTextSize(1);
+	tft.print("UVA: ");
+	tft.setTextColor(CYAN);
+	tft.setTextSize(2);
 	tft.println(msg5);
 	tft.setTextSize(0);
 	tft.println();
+	delay(200);
 
-	tft.setTextColor(BLUE);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
-	tft.println("UVB:");
-	tft.setTextSize(1);
+	tft.print("UVB: ");
+	tft.setTextColor(CYAN);
+	tft.setTextSize(2);
 	tft.println(msg6);
 	tft.setTextSize(0);
 	tft.println();
+	delay(200);
 
-	tft.setTextColor(BLUE);
+	tft.setTextColor(WHITE);
 	tft.setTextSize(1);
-	tft.println("UV Index:");
-	tft.setTextSize(1.5);
+	tft.print("UV Index: ");
+	tft.setTextColor(CYAN);
+	tft.setTextSize(2);
 	tft.println(msg6);
 	tft.setTextSize(0);
 	tft.println();
-
-	delay(2000);
+	delay(5000);
 
 }
 
@@ -529,7 +553,7 @@ void loop()
 void print (const char str[], int number) {
 	char buf[100];
 	sprintf(buf, "%s %d", str, number);
-	DEBUG_PRINTLINE(buf);
+	DBUG_PRINTLN(buf);
 }
 
 void print (const char str[], float number) {
@@ -537,5 +561,5 @@ void print (const char str[], float number) {
 	char strbuf[10];
 	dtostrf(number, 3, 3, strbuf);
 	sprintf(buf, "%s %s", str, strbuf);
-	DEBUG_PRINTLINE(buf);
+	DBUG_PRINTLN(buf);
 }
