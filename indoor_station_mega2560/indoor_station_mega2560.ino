@@ -115,9 +115,13 @@ const static uint8_t PIN_RADIO_CSN = 10;
 
 struct RadioPacket // Any packet up to 32 bytes can be sent.
 {
-	uint32_t outTemp;
-	uint32_t outHum;
-	uint32_t outIndex;
+	float outTemp;
+	float outHum;
+	float outPress;
+	float outIllum;
+	float outUva;
+	float outUvb;
+	float outUvIndex;
 };
 
 NRFLite _radio;
@@ -262,7 +266,7 @@ void loop()
 	tft.setCursor(0, 5);
 	tft.fillScreen(BLACK);
 	tft.setTextColor(WHITE);
-	tft.setTextSize(3);
+	tft.setTextSize(2);
 	tft.print(Clock.getHour(h12, PM), DEC);
 	tft.print(":");
 	tft.print(Clock.getMinute(), DEC);
@@ -278,23 +282,14 @@ void loop()
 	tft.print(Clock.getMonth(Century), DEC);
 	tft.print(".");
 	tft.println(Clock.getYear(), DEC);
-	delay(1000);
+	delay(2000);
 
 
 	/*
 	 * DHT Sensor Read
 	 */
 	// Wait a few seconds between measurements.
-	delay(3000);
-
-	// Print Title to OLED
-	tft.fillScreen(BLACK);
-	tft.setCursor(0, 5);
-	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
-	tft.println("Indoor");
-	tft.setTextSize(0);
-	tft.println();
+	//delay(3000);
 
 	// Reading temperature or humidity takes about 250 milliseconds!
 	// Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
@@ -331,10 +326,19 @@ void loop()
 	Serial.println();
 	Serial.println();
 
+	// Print Title to OLED
+	tft.fillScreen(BLACK);
+	tft.setCursor(0, 5);
+	tft.setTextColor(WHITE);
+	tft.setTextSize(2);
+	tft.println("Indoor");
+	tft.setTextSize(0);
+	tft.println();
+
 	// Print values to OLED
 	tft.setTextColor(RED);
 	tft.setTextSize(1);
-	tft.print("Temp.: ");
+	tft.print("Temperatur: ");
 	tft.setTextSize(0);
 	tft.println();
 	tft.setTextSize(2);
@@ -346,7 +350,7 @@ void loop()
 
 	tft.setTextColor(MAGENTA);
 	tft.setTextSize(1);
-	tft.print("Index: ");
+	tft.print("Temp.-Index: ");
 	tft.setTextSize(0);
 	tft.println();
 	tft.setTextSize(2);
@@ -358,7 +362,7 @@ void loop()
 
 	tft.setTextColor(BLUE);
 	tft.setTextSize(1);
-	tft.print("Luft: ");
+	tft.print("Luftfeuchtigkeit: ");
 	tft.setTextSize(0);
 	tft.println();
 	tft.setTextSize(2);
@@ -366,20 +370,13 @@ void loop()
 	tft.println("%");
 	tft.setTextSize(0);
 	tft.println();
-	delay(1000);
+
+	delay(2000);
 
 
 	/*
 	 * nRF24L01+ Radio RX
 	 */
-	// Print Title to OLED
-	tft.fillScreen(BLACK);
-	tft.setCursor(0, 5);
-	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
-	tft.println("Outdoor");
-	tft.setTextSize(0);
-	tft.println();
 
 	while (_radio.hasData())
 	{
@@ -395,17 +392,54 @@ void loop()
 	msg2 += "%";
 
 	String msg3 = "";
-	msg3 += _radioData.outIndex;
-	msg3 += "°C";
+	msg3 += _radioData.outPress;
+	msg3 += "kPa";
 
-	Serial.println("Temp.: ");
-	Serial.print(msg1);
+	String msg4 = "";
+	msg4 += _radioData.outIllum;
+	msg4 += "lx";
 
-	Serial.println("Luft: ");
-	Serial.print(msg2);
+	String msg5 = "";
+	msg5 += _radioData.outUva;
+	msg5 += "";
 
-	Serial.println("Index: ");
-	Serial.print(msg3);
+	String msg6 = "";
+	msg6 += _radioData.outUvb;
+	msg6 += "";
+
+	String msg7 = "";
+	msg7 += _radioData.outUvIndex;
+	msg7 += "";
+
+	Serial.print("Temp.: ");
+	Serial.println(msg1);
+
+	Serial.print("Luftfeuchtigkeit: ");
+	Serial.println(msg2);
+
+	Serial.print("Luftdruck: ");
+	Serial.println(msg3);
+
+	Serial.print("Illuminanz: ");
+	Serial.println(msg4);
+
+	Serial.print("UVA: ");
+	Serial.println(msg5);
+
+	Serial.print("UVB: ");
+	Serial.println(msg6);
+
+	Serial.print("UV Index: ");
+	Serial.println(msg7);
+
+	// Print Title to OLED
+	tft.fillScreen(BLACK);
+	tft.setCursor(0, 5);
+	tft.setTextColor(WHITE);
+	tft.setTextSize(2);
+	tft.println("Outdoor");
+	tft.setTextSize(0);
+	tft.println();
 
 	// Print values to OLED
 
@@ -419,21 +453,66 @@ void loop()
 
 	tft.setTextColor(MAGENTA);
 	tft.setTextSize(1);
-	tft.println("Index:");
-	tft.setTextSize(2);
-	tft.println(msg3);
-	tft.setTextSize(0);
-	tft.println();
-
-	tft.setTextColor(BLUE);
-	tft.setTextSize(1);
-	tft.println("Luft:");
+	tft.println("Luftfeuchtigkeit:");
 	tft.setTextSize(2);
 	tft.println(msg2);
 	tft.setTextSize(0);
 	tft.println();
 
-	delay(1000);
+	tft.setTextColor(BLUE);
+	tft.setTextSize(1);
+	tft.println("Luftdruck:");
+	tft.setTextSize(2);
+	tft.println(msg3);
+	tft.setTextSize(0);
+	tft.println();
+
+	delay(2000);
+
+	// Print Title to OLED
+	tft.fillScreen(BLACK);
+	tft.setCursor(0, 5);
+	tft.setTextColor(WHITE);
+	tft.setTextSize(2);
+	tft.println("Outdoor");
+	tft.setTextSize(0);
+	tft.println();
+
+	// Print values to OLED
+
+	tft.setTextColor(RED);
+	tft.setTextSize(1);
+	tft.println("Illuminanz:");
+	tft.setTextSize(1);
+	tft.println(msg4);
+	tft.setTextSize(0);
+	tft.println();
+
+	tft.setTextColor(MAGENTA);
+	tft.setTextSize(1);
+	tft.println("UVA:");
+	tft.setTextSize(1);
+	tft.println(msg5);
+	tft.setTextSize(0);
+	tft.println();
+
+	tft.setTextColor(BLUE);
+	tft.setTextSize(1);
+	tft.println("UVB:");
+	tft.setTextSize(1);
+	tft.println(msg6);
+	tft.setTextSize(0);
+	tft.println();
+
+	tft.setTextColor(BLUE);
+	tft.setTextSize(1);
+	tft.println("UV Index:");
+	tft.setTextSize(1.5);
+	tft.println(msg6);
+	tft.setTextSize(0);
+	tft.println();
+
+	delay(2000);
 
 }
 

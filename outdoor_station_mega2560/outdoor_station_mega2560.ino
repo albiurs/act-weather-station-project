@@ -45,6 +45,12 @@ DHT dht(DHTPIN, DHTTYPE);	// Initialize DHT sensor.
 
 
 /*
+ * MKR ENV initialize
+ */
+// No definitions required by the MKR ENV shield.
+
+
+/*
  * nRF24L01+ Radio TX initialize
  */
 
@@ -65,9 +71,13 @@ const static uint8_t PIN_RADIO_CSN = 2;
 
 struct RadioPacket // Any packet up to 32 bytes can be sent.
 {
-	uint32_t outTemp;
-	uint32_t outHum;
-	uint32_t outIndex;
+	float outTemp;
+	float outHum;
+	float outPress;
+	float outIllum;
+	float outUva;
+	float outUvb;
+	float outUvIndex;
 };
 
 struct RadioPacket0 // Any packet up to 32 bytes can be sent.
@@ -232,14 +242,22 @@ void loop()
 	/*
 	 * nRF24L01+ Radio TX
 	 */
-	_radioData.outTemp = t;
-	_radioData.outHum = h;
-	_radioData.outIndex = hic;
+	_radioData.outTemp = temperature;
+	_radioData.outHum = humidity;
+	_radioData.outPress = pressure;
+	_radioData.outIllum = illuminance;
+	_radioData.outUva = uva;
+	_radioData.outUvb = uvb;
+	_radioData.outUvIndex = uvIndex;
 
 	Serial.println("Sending:");
 	Serial.println(_radioData.outTemp);
 	Serial.println(_radioData.outHum);
-	Serial.println(_radioData.outIndex);
+	Serial.println(_radioData.outPress);
+	Serial.println(_radioData.outIllum);
+	Serial.println(_radioData.outUva);
+	Serial.println(_radioData.outUvb);
+	Serial.println(_radioData.outUvIndex);
 
 	// By default, 'send' transmits data and waits for an acknowledgement.  If no acknowledgement is received,
 	// it will try again up to 16 times.  You can also perform a NO_ACK send that does not request an acknowledgement.
