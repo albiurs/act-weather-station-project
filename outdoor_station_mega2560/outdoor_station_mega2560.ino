@@ -22,13 +22,13 @@
 /*
  * Debug initialize
  */
-#define DEBUG // activate "debug switch"
-#ifdef DEBUG
+#define DBUG // activate "debug switch"
+#ifdef DBUG
 #define DBUG_PRINT(x) Serial.print(x)		// activate print
-#define DEBUG_PRINTLINE(x) Serial.println(x)	// activate print line
+#define DBUG_PRINTLN(x) Serial.println(x)	// activate print line
 #else
-#define DEBUG_PRINT(x)						// do nothing
-#define DEBUG_PRINTLINE(x)					// do nothing
+#define DBUG_PRINT(x)						// do nothing
+#define DBUG_PRINTLN(x)					// do nothing
 #endif
 
 
@@ -83,6 +83,7 @@ void setup()
 	/*
 	 * Start serial port & serial monitor to Baud rate 9600 bits/s
 	 */
+	DBUG_PRINTLN("Start serial monitor");
 	Serial.begin(9600); // serial return of Arduino's output
 	//DEBUG_PRINTLINE("my debug message");
 
@@ -90,8 +91,9 @@ void setup()
 	/*
 	 * Start MKR ENV Shield
 	 */
+	DBUG_PRINTLN("Start MKR ENV Shield");
 	if (!ENV.begin()) {
-		Serial.println("Failed to initialize MKR ENV shield!");
+		DBUG_PRINTLN("Failed to initialize MKR ENV shield!");
 		while (1);
 	}
 
@@ -105,11 +107,12 @@ void setup()
 	// You can assign a different bitrate and channel as shown below.
 	//   _radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE250KBPS, 0)
 	//   _radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE1MBPS, 75)
+	DBUG_PRINTLN("Start Radio");
 	_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE2MBPS, 100); // THE DEFAULT
 
 	if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN))
 	{
-		Serial.println("Cannot communicate with radio");
+		DBUG_PRINTLN("Cannot communicate with radio");
 		while (1); // Wait here forever.
 	}
 
@@ -137,33 +140,34 @@ void loop()
 	float uvIndex     = ENV.readUVIndex();
 
 	// print each of the sensor values
-	Serial.print("Temperature = ");
-	Serial.print(temperature);
-	Serial.println(" °C");
+	DBUG_PRINT("Temperature = ");
+	DBUG_PRINT(temperature);
+	DBUG_PRINTLN(" °C");
 
-	Serial.print("Humidity    = ");
-	Serial.print(humidity);
-	Serial.println(" %");
+	DBUG_PRINT("Humidity    = ");
+	DBUG_PRINT(humidity);
+	DBUG_PRINTLN(" %");
 
-	Serial.print("Pressure    = ");
-	Serial.print(pressure);
-	Serial.println(" kPa");
+	DBUG_PRINT("Pressure    = ");
+	DBUG_PRINT(pressure);
+	DBUG_PRINTLN(" kPa");
 
-	Serial.print("Illuminance = ");
-	Serial.print(illuminance);
-	Serial.println(" lx");
+	DBUG_PRINT("Illuminance = ");
+	DBUG_PRINT(illuminance);
+	DBUG_PRINTLN(" lx");
 
-	Serial.print("UVA         = ");
-	Serial.println(uva);
+	DBUG_PRINT("UVA         = ");
+	DBUG_PRINTLN(uva);
 
-	Serial.print("UVB         = ");
-	Serial.println(uvb);
+	DBUG_PRINT("UVB         = ");
+	DBUG_PRINTLN(uvb);
 
-	Serial.print("UV Index    = ");
-	Serial.println(uvIndex);
+	DBUG_PRINT("UV Index    = ");
+	DBUG_PRINTLN(uvIndex);
 
 	// print an empty line
-	Serial.println();
+	DBUG_PRINTLN();
+	DBUG_PRINTLN();
 
 
 	/*
@@ -177,14 +181,14 @@ void loop()
 	_radioData.outUvb = uvb;
 	_radioData.outUvIndex = uvIndex;
 
-	Serial.println("Sending:");
-	Serial.println(_radioData.outTemp);
-	Serial.println(_radioData.outHum);
-	Serial.println(_radioData.outPress);
-	Serial.println(_radioData.outIllum);
-	Serial.println(_radioData.outUva);
-	Serial.println(_radioData.outUvb);
-	Serial.println(_radioData.outUvIndex);
+	DBUG_PRINTLN("Sending:");
+	DBUG_PRINTLN(_radioData.outTemp);
+	DBUG_PRINTLN(_radioData.outHum);
+	DBUG_PRINTLN(_radioData.outPress);
+	DBUG_PRINTLN(_radioData.outIllum);
+	DBUG_PRINTLN(_radioData.outUva);
+	DBUG_PRINTLN(_radioData.outUvb);
+	DBUG_PRINTLN(_radioData.outUvIndex);
 
 	// By default, 'send' transmits data and waits for an acknowledgement.  If no acknowledgement is received,
 	// it will try again up to 16 times.  You can also perform a NO_ACK send that does not request an acknowledgement.
@@ -196,11 +200,11 @@ void loop()
 
 	if (_radio.send(DESTINATION_RADIO_ID, &_radioData, sizeof(_radioData))) // Note how '&' must be placed in front of the variable name.
 	{
-		Serial.println("...Success");
+		DBUG_PRINTLN("...Success");
 	}
 	else
 	{
-		Serial.println("...Failed");
+		DBUG_PRINTLN("...Failed");
 	}
 
 	delay(1000);
@@ -221,7 +225,7 @@ void loop()
 void print (const char str[], int number) {
 	char buf[100];
 	sprintf(buf, "%s %d", str, number);
-	DEBUG_PRINTLINE(buf);
+	DBUG_PRINTLN(buf);
 }
 
 void print (const char str[], float number) {
@@ -229,5 +233,5 @@ void print (const char str[], float number) {
 	char strbuf[10];
 	dtostrf(number, 3, 3, strbuf);
 	sprintf(buf, "%s %s", str, strbuf);
-	DEBUG_PRINTLINE(buf);
+	DBUG_PRINTLN(buf);
 }
