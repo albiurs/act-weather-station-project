@@ -6,6 +6,9 @@
  * 	- Adafruit_Unified_Sensor	v1.0.3	Adafruit Unified Sensor: https://github.com/adafruit/Adafruit_Sensor
  *	- SPI						------	SPI Master library for Arduino (Arduino built-in)
  *	- NRFLite					2.2.2	nRF24L01+ 2.4 GHz Transceiver library: https://github.com/dparson55/NRFLite
+ *	- Arduino_MKRENV			1.1.0	MKRENV Library for Arduino: https://github.com/arduino-libraries/Arduino_MKRENV
+ *	- Wire						------	I2C interface library (Arduino built-in) (required by Arduino_MKRENV)
+ *	- WiFiNINA					1.4.0	Arduino MKR 1010 library: https://www.arduino.cc/en/Reference/WiFiNINA
  */
 
 
@@ -14,8 +17,9 @@
  */
 #include "Arduino.h"
 #include "DHT.h"				// DHT sensor librar
-#include <SPI.h>				// SPI Master library for Arduino (required by Adafruit_GFX.h and NRFLite.h)
+#include <SPI.h>				// SPI Master library for Arduino (required by NRFLite.h)
 #include <NRFLite.h>			// nRF24L01+ Transceiver library
+#include <Arduino_MKRENV.h>		// MKRENV Library for Arduino
 
 
 /*
@@ -101,6 +105,15 @@ void setup()
 
 
 	/*
+	 * Start MKR ENV Shield
+	 */
+	if (!ENV.begin()) {
+		Serial.println("Failed to initialize MKR ENV shield!");
+		while (1);
+	}
+
+
+	/*
 	 * Start nRF24L01+ Radio
 	 */
 	// By default, 'init' configures the radio to use a 2MBPS bitrate on channel 100 (channels 0-125 are valid).
@@ -169,6 +182,51 @@ void loop()
 	//Serial.println(F("°F"));
 	Serial.println();
 	Serial.println();
+
+
+	/*
+	 * MKR ENV read
+	 */
+	// read all the sensor values
+	float temperature = ENV.readTemperature();
+	float humidity    = ENV.readHumidity();
+	float pressure    = ENV.readPressure();
+	float illuminance = ENV.readIlluminance();
+	float uva         = ENV.readUVA();
+	float uvb         = ENV.readUVB();
+	float uvIndex     = ENV.readUVIndex();
+
+	// print each of the sensor values
+	Serial.print("Temperature = ");
+	Serial.print(temperature);
+	Serial.println(" °C");
+
+	Serial.print("Humidity    = ");
+	Serial.print(humidity);
+	Serial.println(" %");
+
+	Serial.print("Pressure    = ");
+	Serial.print(pressure);
+	Serial.println(" kPa");
+
+	Serial.print("Illuminance = ");
+	Serial.print(illuminance);
+	Serial.println(" lx");
+
+	Serial.print("UVA         = ");
+	Serial.println(uva);
+
+	Serial.print("UVB         = ");
+	Serial.println(uvb);
+
+	Serial.print("UV Index    = ");
+	Serial.println(uvIndex);
+
+	// print an empty line
+	Serial.println();
+
+	// wait 1 second to print again
+	delay(1000);
 
 
 	/*
