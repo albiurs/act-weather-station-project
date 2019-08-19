@@ -1,5 +1,5 @@
 # Compiled source #
-####################
+###################
 *.com
 *.class
 *.dll
@@ -69,6 +69,7 @@ Thumbs.db
 
 # Project related files & folders #
 ###################################
+.cproject
 .komodotools
 .project
 .tmproj
@@ -79,3 +80,5 @@ Thumbs.db
 _*/
 _notes
 nbproject
+spec.d
+
