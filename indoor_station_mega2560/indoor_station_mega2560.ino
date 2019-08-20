@@ -533,7 +533,7 @@ void loop()
 	tft.print("UV Index: ");
 	tft.setTextColor(CYAN);
 	tft.setTextSize(2);
-	tft.println(msg6);
+	tft.println(msg7);
 	tft.setTextSize(0);
 	tft.println();
 	delay(5000);
