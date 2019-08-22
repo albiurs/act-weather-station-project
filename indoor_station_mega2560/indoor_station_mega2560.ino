@@ -172,13 +172,15 @@ void setup()
 	// and then re-upload it to the board. Otherwise your clock will reset
 	// every time you open the serial monitor.
 
-	Clock.setSecond(8);//Set the second
-	Clock.setMinute(58);//Set the minute
-	Clock.setHour(8);  //Set the hour
-	Clock.setDoW(6);    //Set the day of the week
-	Clock.setDate(17);  //Set the date of the month
+	//Clock.setSecond(10);//Set the second
+	/*
+	Clock.setMinute(32);//Set the minute
+	Clock.setHour(12);  //Set the hour
+	Clock.setDoW(4);    //Set the day of the week
+	Clock.setDate(22);  //Set the date of the month
 	Clock.setMonth(8);  //Set the month of the year
 	Clock.setYear(19);  //Set the year (Last two digits of the year)
+	*/
 
 
 	/*
