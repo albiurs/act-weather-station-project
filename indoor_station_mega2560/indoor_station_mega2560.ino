@@ -1,8 +1,4 @@
 /*
-* Test Regula
-*/
-
-/*
  * Arduino Indoor Weather Station Project
  *
  * REQUIRES the following Arduino libraries:
