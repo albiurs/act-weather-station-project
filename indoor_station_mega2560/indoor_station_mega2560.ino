@@ -275,7 +275,7 @@ void loop()
 	DBUG_PRINTLN();
 
 	//Set Font
-  tft.setFont(&FreeSansBoldOblique12pt7b);
+  tft.setFont(&FreeMonoBoldOblique12pt7b);
 	
 	// Print values to OLED
 	tft.setCursor(0, 5);
