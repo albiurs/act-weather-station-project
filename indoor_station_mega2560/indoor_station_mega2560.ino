@@ -25,7 +25,8 @@
 #include <Adafruit_SSD1351.h>	// Adafruit 1.5" 16-bit Color OLED  Driver
 #include <SPI.h>				// SPI Master library for Arduino (required by Adafruit_GFX.h and NRFLite.h)
 #include <NRFLite.h>			// nRF24L01+ Transceiver library
-
+#include <Fonts/FreeSansBoldOblique12pt7b.h>
+#include <Fonts/FreeSans9pt7b.h>
 
 /*
  * Debug initialize
@@ -273,6 +274,9 @@ void loop()
 	DBUG_PRINTLN();
 	DBUG_PRINTLN();
 
+	//Set Font
+  tft.setFont(&FreeSansBoldOblique12pt7b);
+	
 	// Print values to OLED
 	tft.setCursor(0, 5);
 	tft.fillScreen(BLACK);
