@@ -114,8 +114,8 @@ Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, CS_PIN, DC_
 // GND   -> GND
 
 const static uint8_t RADIO_ID = 0;       // Our radio's id.  The transmitter will send to this id.
-const static uint8_t PIN_RADIO_CE = 9;
-const static uint8_t PIN_RADIO_CSN = 10;
+const static uint8_t PIN_RADIO_CE = 14;
+const static uint8_t PIN_RADIO_CSN = 15;
 
 struct RadioPacket // Any packet up to 32 bytes can be sent.
 {
