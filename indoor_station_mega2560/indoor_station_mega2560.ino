@@ -25,7 +25,6 @@
 #include <Adafruit_SSD1351.h>	// Adafruit 1.5" 16-bit Color OLED  Driver
 #include <SPI.h>				// SPI Master library for Arduino (required by Adafruit_GFX.h and NRFLite.h)
 #include <NRFLite.h>			// nRF24L01+ Transceiver library
-#include <Fonts/FreeSansBoldOblique12pt7b.h>
 #include <Fonts/FreeSans9pt7b.h>
 
 /*
@@ -115,8 +114,8 @@ Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, CS_PIN, DC_
 // GND   -> GND
 
 const static uint8_t RADIO_ID = 0;       // Our radio's id.  The transmitter will send to this id.
-const static uint8_t PIN_RADIO_CE = 9;
-const static uint8_t PIN_RADIO_CSN = 10;
+const static uint8_t PIN_RADIO_CE = 14;
+const static uint8_t PIN_RADIO_CSN = 15;
 
 struct RadioPacket // Any packet up to 32 bytes can be sent.
 {
@@ -275,14 +274,14 @@ void loop()
 	DBUG_PRINTLN();
 
 	//Set Font
-  tft.setFont(&FreeMonoBoldOblique12pt7b);
+  tft.setFont(&FreeSans9pt7b);
 	
 	// Print values to OLED
 	tft.setCursor(0, 5);
 	tft.fillScreen(BLACK);
 	tft.println();
 	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.print(Clock.getHour(h12, PM), DEC);
 	tft.print(":");
 	tft.print(Clock.getMinute(), DEC);
@@ -291,7 +290,7 @@ void loop()
 	tft.println();
 	delay(200);
 
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.setTextColor(WHITE);
 	tft.print(Clock.getDate(), DEC);
 	tft.print(".");
@@ -343,7 +342,7 @@ void loop()
 	tft.fillScreen(BLACK);
 	tft.setCursor(0, 5);
 	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
+	tft.setTextSize(0);
 	tft.println("Indoor");
 	tft.setTextSize(0);
 	tft.println();
@@ -355,7 +354,7 @@ void loop()
 	tft.setTextColor(RED);
 	tft.setTextSize(0);
 	tft.println();
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.print(t);
 	tft.println(" °C");
 	tft.setTextSize(0);
@@ -368,7 +367,7 @@ void loop()
 	tft.setTextColor(MAGENTA);
 	tft.setTextSize(0);
 	tft.println();
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.print(hic);
 	tft.println(" °C");
 	tft.setTextSize(0);
@@ -381,7 +380,7 @@ void loop()
 	tft.setTextColor(BLUE);
 	tft.setTextSize(0);
 	tft.println();
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.print(h);
 	tft.println(" %");
 	tft.setTextSize(0);
@@ -456,7 +455,7 @@ void loop()
 	tft.fillScreen(BLACK);
 	tft.setCursor(0, 5);
 	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println("Outdoor");
 	tft.setTextSize(0);
 	tft.println();
@@ -467,7 +466,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.println("Temperatur:");
 	tft.setTextColor(RED);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg1);
 	tft.setTextSize(0);
 	tft.println();
@@ -477,7 +476,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.println("Luftfeuchtigkeit:");
 	tft.setTextColor(BLUE);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg2);
 	tft.setTextSize(0);
 	tft.println();
@@ -487,7 +486,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.println("Luftdruck:");
 	tft.setTextColor(MAGENTA);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg3);
 	tft.setTextSize(0);
 	tft.println();
@@ -497,7 +496,7 @@ void loop()
 	tft.fillScreen(BLACK);
 	tft.setCursor(0, 5);
 	tft.setTextColor(WHITE);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println("Outdoor");
 	tft.setTextSize(0);
 	tft.println();
@@ -508,7 +507,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.println("Illuminanz:");
 	tft.setTextColor(YELLOW);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg4);
 	tft.setTextSize(0);
 	tft.println();
@@ -518,7 +517,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.print("UVA: ");
 	tft.setTextColor(CYAN);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg5);
 	tft.setTextSize(0);
 	tft.println();
@@ -528,7 +527,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.print("UVB: ");
 	tft.setTextColor(CYAN);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg6);
 	tft.setTextSize(0);
 	tft.println();
@@ -538,7 +537,7 @@ void loop()
 	tft.setTextSize(1);
 	tft.print("UV Index: ");
 	tft.setTextColor(CYAN);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println(msg7);
 	tft.setTextSize(0);
 	tft.println();
