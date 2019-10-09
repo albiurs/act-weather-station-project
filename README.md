@@ -7,9 +7,18 @@ Arduino-based weather station project; Atomic Clock Team (ACT), School of Engine
 component | usage | image
 ------------ | ------------- | -------------
 [Arduino Mega 2560 REV3](https://store.arduino.cc/usa/mega-2560-r3)| basic board | <img src="https://botland.com.pl/55883-thickbox_default/arduino-mega-2560-rev3-module-a000067.jpg" alt="drawing" width="100"/>
- Zeile 2| zeile 2
+[Adafruit OLED Breakout Board 16-bit Color 1.5" w/microSD h](https://www.digitec.ch/de/s1/product/adafruit-oled-breakout-board-16-bit-color-15-wmicrosd-h-elektronikmodul-5998537)| OLED Display | <img src="https://cdn-learn.adafruit.com/guides/cropped_images/000/000/348/medium640/1431flower_LRG.jpg" alt="drawing" width="100"/>
+[Adafruit DHT22 temperature-humidity sensor](https://www.adafruit.com/product/385) | sensor for indoor temperature and humidity | <img src="https://cdn-shop.adafruit.com/970x728/385-00.jpg" alt="drawing" width="100"/>
+[DS3231 breakout - Präzisions-Echtzeituhr DS3231, Adafruit](https://www.distrelec.ch/de/praezisions-echtzeituhr-ds3231-adafruit-3013-ds3231-breakout/p/30091211) | real time clock | <img src="https://cdn-learn.adafruit.com/guides/cropped_images/000/001/231/medium640/thump.jpg?1520543977" alt="drawing" width="100"/>
+[NRF24L01P-MODULE-PCB - Modul mit PCB Antenne, Nordic Semiconductor](https://www.distrelec.ch/de/modul-mit-pcb-antenne-nordic-semiconductor-nrf24l01p-module-pcb/p/17328568?queryFromSuggest=true) | wireless transiever | <img src="http://robotechshop.com/wp-content/uploads/2016/01/nrf2401.jpg" alt="drawing" width="100"/>
+
  
 ## Outdoor Module
+component | usage | image
+------------ | ------------- | -------------
+[Arduino Mega 2560 REV3](https://store.arduino.cc/usa/mega-2560-r3)| basic board | <img src="https://botland.com.pl/55883-thickbox_default/arduino-mega-2560-rev3-module-a000067.jpg" alt="drawing" width="100"/>
+[Adafruit BME280 I2C/SPI Temperature Humidity Pressure Sensor](https://www.play-zone.ch/de/adafruit-bme280-i2c-spi-temperature-humidity-pressure-sensor.html) | sensor for indoor temperature and humidity | <img src="https://www.play-zone.ch/media/catalog/product/cache/1/image/650x/0ae87949542eeaf1748dd8a48e1c5f15/2/6/2652-00.jpg" alt="drawing" width="100"/>
+[NRF24L01P-MODULE-PCB - Modul mit PCB Antenne, Nordic Semiconductor](https://www.distrelec.ch/de/modul-mit-pcb-antenne-nordic-semiconductor-nrf24l01p-module-pcb/p/17328568?queryFromSuggest=true) | wireless transiever | <img src="http://robotechshop.com/wp-content/uploads/2016/01/nrf2401.jpg" alt="drawing" width="100"/>
 
 # Software
 ## Indoor Module
