@@ -19,6 +19,7 @@ component | usage | image
 [Arduino Mega 2560 REV3](https://store.arduino.cc/usa/mega-2560-r3)| basic board | <img src="https://botland.com.pl/55883-thickbox_default/arduino-mega-2560-rev3-module-a000067.jpg" alt="drawing" width="100"/>
 [Adafruit BME280 I2C/SPI Temperature Humidity Pressure Sensor](https://www.play-zone.ch/de/adafruit-bme280-i2c-spi-temperature-humidity-pressure-sensor.html) | sensor for indoor temperature and humidity | <img src="https://www.play-zone.ch/media/catalog/product/cache/1/image/650x/0ae87949542eeaf1748dd8a48e1c5f15/2/6/2652-00.jpg" alt="drawing" width="100"/>
 [NRF24L01P-MODULE-PCB - Modul mit PCB Antenne, Nordic Semiconductor](https://www.distrelec.ch/de/modul-mit-pcb-antenne-nordic-semiconductor-nrf24l01p-module-pcb/p/17328568?queryFromSuggest=true) | wireless transiever | <img src="http://robotechshop.com/wp-content/uploads/2016/01/nrf2401.jpg" alt="drawing" width="100"/>
+[ADAFRUIT BME280 I2C OR SPI TEMPERATURE HUMIDITY PRESSURE SENSOR](https://www.adafruit.com/product/2652) | Sensor |<img src="https://cdn-shop.adafruit.com/970x728/2652-00.jpg" alt="drawing" width="100"/>
 
 # Software
 ## Indoor Module
