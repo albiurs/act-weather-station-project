@@ -32,6 +32,11 @@
 #include "xmbBits.h" // Bitmaps
 
 /*
+  Include functions for screen displays
+*/
+#include "screens.h"
+
+/*
    Debug initialize
 */
 #define DBUG // activate "debug switch"
@@ -220,9 +225,6 @@ void setup()
     DBUG_PRINTLN("Cannot communicate with radio");
   }
 
-  DBUG_PRINTLN();
-  DBUG_PRINTLN();
-
 }
 
 /****************
@@ -258,8 +260,6 @@ void loop() {
   DBUG_PRINT2ARGS(Clock.getMinute(), DEC);
   DBUG_PRINT(' ');
   DBUG_PRINT2ARGS(Clock.getSecond(), DEC);
-  DBUG_PRINTLN();
-  DBUG_PRINTLN();
 
 
 
@@ -351,32 +351,5 @@ void loop() {
     showScreenFive();  // info "no connection to outdoor module"
     delay(SCRNDELAY);
   }
-}
-
-
-/*************
-   FUNCTIONS
- ************/
-
-/*
-  Include functions for screen displays
-*/
-#include "screens.h"
-
-/*
-   Print functions
-*/
-void print (const char str[], int number) {
-  char buf[100];
-  sprintf(buf, "%s %d", str, number);
-  DBUG_PRINTLN(buf);
-}
-
-void print (const char str[], float number) {
-  char buf[100];
-  char strbuf[10];
-  dtostrf(number, 3, 3, strbuf);
-  sprintf(buf, "%s %s", str, strbuf);
-  DBUG_PRINTLN(buf);
 }
 
