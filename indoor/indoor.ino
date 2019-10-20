@@ -16,7 +16,7 @@
 /*
    Include libraries
 */
-#include "Arduino.h" // wird diese wirklich benötigt??
+#include "Arduino.h"
 #include "DHT.h"				      // DHT sensor library
 #include <DS3231.h>			      // RTC DS3231 library
 #include <Wire.h>			      	// I2C wire interface library
@@ -56,14 +56,13 @@ int const SCRNDELAY = 10000; // delay between screen-changes in msec
    declare variables
 */
 float pressure;
-float pressureOld = 0;
-boolean showWelcomeScreens = true;
-String dowString[7] = {
+bool showWelcomeScreens = true;
+char dowString[7][3] = {
   "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"
 };
 
-String monthString[12] = {
-  "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "Sepember", "Oktober", "November", "Dezember"
+char monthString[12][10] = {
+  "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"
 };
 
 /*
