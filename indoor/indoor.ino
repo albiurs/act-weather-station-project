@@ -179,8 +179,28 @@ void setup()
   DBUG_PRINTLN(F("Start DHT measurement"));
   dht.begin();
 
+  /*	
+     Start RTC > setup date & time	
+  */	
+  // VERYIMPORTANT COMMENTS BELOW!!!	
+  // If you want to set the time, change these numbers to the date and time	
+  // you want to set to, and then upload it to the arduino.	
+  //	
+  // once you have finished setting the time, comment out the following clock.set functions	
+  // and then re-upload it to the board. Otherwise your clock will reset	
+  // every time you open the serial monitor.	
 
-  /*
+  //Clock.setSecond(10);//Set the second	
+  /*	
+    Clock.setMinute(56);//Set the minute	
+    Clock.setHour(15);  //Set the hour	
+    Clock.setDoW(6);    //Set the day of the week (1 for Monday through 7 for Sunday)	
+    Clock.setDate(5);  //Set the date of the month	
+    Clock.setMonth(10);  //Set the month of the year	
+    Clock.setYear(19);  //Set the year (Last two digits of the year)	
+  */
+   
+   /*
      Start OLED
   */
   DBUG_PRINTLN("Start OLED");
