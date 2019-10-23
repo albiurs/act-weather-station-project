@@ -16,7 +16,7 @@
 /*
    Include libraries
 */
-#include "Arduino.h" // wird diese wirklich benötigt??
+#include "Arduino.h"
 #include "DHT.h"				      // DHT sensor library
 #include <DS3231.h>			      // RTC DS3231 library
 #include <Wire.h>			      	// I2C wire interface library
@@ -57,13 +57,13 @@ int const SCRNDELAY = 10000; // delay between screen-changes in msec
 */
 float pressure;
 float pressureOld = 0;
-boolean showWelcomeScreens = true;
-String dowString[7] = {
+bool showWelcomeScreens = true;
+char dowString[7][3] = {
   "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"
 };
 
-String monthString[12] = {
-  "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "Sepember", "Oktober", "November", "Dezember"
+char monthString[12][10] = {
+  "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"
 };
 
 /*
@@ -179,31 +179,28 @@ void setup()
   DBUG_PRINTLN(F("Start DHT measurement"));
   dht.begin();
 
+  /*	
+     Start RTC > setup date & time	
+  */	
+  // VERYIMPORTANT COMMENTS BELOW!!!	
+  // If you want to set the time, change these numbers to the date and time	
+  // you want to set to, and then upload it to the arduino.	
+  //	
+  // once you have finished setting the time, comment out the following clock.set functions	
+  // and then re-upload it to the board. Otherwise your clock will reset	
+  // every time you open the serial monitor.	
 
-  /*
-     Start RTC > setup date & time
+  //Clock.setSecond(10);//Set the second	
+  /*	
+    Clock.setMinute(56);//Set the minute	
+    Clock.setHour(15);  //Set the hour	
+    Clock.setDoW(6);    //Set the day of the week (1 for Monday through 7 for Sunday)	
+    Clock.setDate(5);  //Set the date of the month	
+    Clock.setMonth(10);  //Set the month of the year	
+    Clock.setYear(19);  //Set the year (Last two digits of the year)	
   */
-  // VERYIMPORTANT COMMENTS BELOW!!!
-  // If you want to set the time, change these numbers to the date and time
-  // you want to set to, and then upload it to the arduino.
-  //
-  // once you have finished setting the time, comment out the following clock.set functions
-  // and then re-upload it to the board. Otherwise your clock will reset
-  // every time you open the serial monitor.
-
-  //Clock.setSecond(10);//Set the second
-  /*
-    Clock.setMinute(56);//Set the minute
-    Clock.setHour(15);  //Set the hour
-
-    Clock.setDoW(6);    //Set the day of the week (1 for Monday through 7 for Sunday)
-    Clock.setDate(5);  //Set the date of the month
-    Clock.setMonth(10);  //Set the month of the year
-    Clock.setYear(19);  //Set the year (Last two digits of the year)
-  */
-
-
-  /*
+   
+   /*
      Start OLED
   */
   DBUG_PRINTLN("Start OLED");
@@ -220,9 +217,6 @@ void setup()
   {
     DBUG_PRINTLN("Cannot communicate with radio");
   }
-
-  DBUG_PRINTLN();
-  DBUG_PRINTLN();
 
 }
 
@@ -259,8 +253,6 @@ void loop() {
   DBUG_PRINT2ARGS(Clock.getMinute(), DEC);
   DBUG_PRINT(' ');
   DBUG_PRINT2ARGS(Clock.getSecond(), DEC);
-  DBUG_PRINTLN();
-  DBUG_PRINTLN();
 
 
 
@@ -354,30 +346,9 @@ void loop() {
   }
 }
 
-
-/*************
-   FUNCTIONS
- ************/
-
 /*
   Include functions for screen displays
 */
+
 #include "screens.h"
-
-/*
-   Print functions
-*/
-void print (const char str[], int number) {
-  char buf[100];
-  sprintf(buf, "%s %d", str, number);
-  DBUG_PRINTLN(buf);
-}
-
-void print (const char str[], float number) {
-  char buf[100];
-  char strbuf[10];
-  dtostrf(number, 3, 3, strbuf);
-  sprintf(buf, "%s %s", str, strbuf);
-  DBUG_PRINTLN(buf);
-}
 

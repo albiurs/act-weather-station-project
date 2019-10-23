@@ -120,7 +120,7 @@ void printValues() {
     Serial.println(" hPa");
     
     Serial.print(bme.seaLevelForAltitude(408.0, bme.readPressure()) / 100.0F);
-    Serial.println(" hPa Seelevel");
+    Serial.println(" hPa Meereshoehe");
 
     Serial.print("Approx. Altitude = ");
     Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
